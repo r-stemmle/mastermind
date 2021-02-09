@@ -9,3 +9,8 @@ class Turn
   # increment guess_counter
   # repeat loop
 end
+
+
+# array method to create all possibilities of game
+# all_possible_codes = ["r", "g", "b", "y"].repeated_permutation(4).to_a
+# p all_possible_codes.sample
