@@ -15,21 +15,20 @@ class TurnTest < Minitest::Test
     assert_instance_of Turn, turn
   end
 
-  def test_it_has_attributes
+  def test_it_can_get_code_from_guess
     guess = 'rrgb'
-    # spot1 = 'r'
-    # spot2 = 'r'
-    # spot3 = 'g'
-    # spot4 = 'b'
-
     turn = Turn.new(guess)
     turn.get_code
 
     assert_equal ['r', 'r', 'g', 'b'], turn.code_guess
   end
 
-  def test_it_can_have_different_attributes
+  def test_it_can_have_secret_code
+    guess = 'rrgb'
+    turn = Turn.new(guess)
+    turn.make_secret_code
 
+    assert true, turn.all_possible_codes.include?(@secret_code)
   end
 
 end
