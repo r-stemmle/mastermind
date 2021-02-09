@@ -1,8 +1,15 @@
 class Turn
-  attr_reader :guess
+  attr_reader :guess, :code_guess, :secret_code
 
   def initialize(guess)
     @guess = guess
+    @code_guess = []
+    @secret_code = []
+  end
+
+  def get_code
+    new = @secret_code << @guess.chars
+    new.flatten
   end
   #turn would have player
   #turn would submit one guess
@@ -11,11 +18,11 @@ class Turn
   # increment guess_counter
   # repeat loop
 end
-<<<<<<< HEAD
-=======
+# <<<<<<< HEAD
+
 
 
 # array method to create all possibilities of game
 # all_possible_codes = ["r", "g", "b", "y"].repeated_permutation(4).to_a
 # p all_possible_codes.sample
->>>>>>> c5ecc780e51f1ae8604011dac8aa6a5ba1a20fbc
+# >>>>>>> c5ecc780e51f1ae8604011dac8aa6a5ba1a20fbc

@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/turn'
+require 'pry'
 
 class TurnTest < Minitest::Test
   def test_it_exists
@@ -15,14 +16,16 @@ class TurnTest < Minitest::Test
   end
 
   def test_it_has_attributes
-    spot1 = 'r'
-    spot2 = 'r'
-    spot3 = 'g'
-    spot4 = 'b'
-    guess = [spot1, spot2, spot3, spot4]
-    turn = Turn.new(guess)
+    guess = 'rrgb'
+    # spot1 = 'r'
+    # spot2 = 'r'
+    # spot3 = 'g'
+    # spot4 = 'b'
 
-    assert_equal ['r', 'r', 'g', 'b'], turn.guess
+    turn = Turn.new(guess)
+    turn.get_code
+
+    assert_equal ['r', 'r', 'g', 'b'], turn.code_guess
   end
 
   def test_it_can_have_different_attributes
