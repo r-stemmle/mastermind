@@ -1,6 +1,24 @@
-# game class
 
-# display game message
+
+
+class Game
+  attr_reader :turn
+
+  def initialize(turn)
+    @turn = turn
+    @start
+  end
+
+  def welcome
+    puts "Welcome to MASTERMIND"
+    puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
+    puts ">"
+    @start = $stdin.gets.chomp.downcase
+  end
+end
+
+
+
 # generates random secret code
 
 #play enters guess

@@ -20,8 +20,6 @@ class Turn
         @white_peg += 1
       end
     end
-
-    # (@secret_code & @code_guess).length
   end
 
   def make_secret_code
