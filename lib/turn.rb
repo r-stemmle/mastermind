@@ -1,15 +1,27 @@
 class Turn
-  attr_accessor :guess, :code_guess, :secret_code, :all_possible_codes
+  attr_accessor :guess, :code_guess, :secret_code, :all_possible_codes, :red_peg, :white_peg
 
   def initialize(guess)
     @guess = guess
     @code_guess = []
     @secret_code = []
+    @red_peg = 0
+    @white_peg = 0
     @all_possible_codes = ["r", "g", "b", "y"].repeated_permutation(4).to_a
   end
 
-  def key_color
-    (@secret_code & @code_guess).length
+  def find_key_colors
+    @red_peg = 0
+    @white_peg = 0
+    @code_guess.each_with_index do |color, index|
+      if color == @secret_code[index]
+        @red_peg += 1
+      else
+        @white_peg += 1
+      end
+    end
+
+    # (@secret_code & @code_guess).length
   end
 
   def make_secret_code

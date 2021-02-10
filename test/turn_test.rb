@@ -95,8 +95,29 @@ class TurnTest < Minitest::Test
     guess = 'rrgb'
     turn = Turn.new(guess)
     turn.get_code
-    turn.secret_code = %w(y r g b)
+    turn.secret_code = %w(y r b r)
+    turn.find_key_colors
 
-    assert_equal 3, turn.key_color
+    assert_equal 3, turn.white_peg
+  end
+
+  def test_it_can_provide_feedback_on_correct_position
+    guess = 'rrgb'
+    turn = Turn.new(guess)
+    turn.get_code
+    turn.secret_code = %w(y r b r)
+    turn.find_key_colors
+
+    assert_equal 1, turn.red_peg
+  end
+
+  def test_it_can_provide_feedback_on_correct_position
+    guess = 'rrbb'
+    turn = Turn.new(guess)
+    turn.get_code
+    turn.secret_code = %w(b b r r)
+    turn.find_key_colors
+
+    assert_equal 0, turn.red_peg
   end
 end
