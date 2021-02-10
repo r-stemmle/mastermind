@@ -29,8 +29,6 @@ class Turn
   def get_code
     if @guess == 'q' || @guess == "quit"
       p "You have exited the game"
-    elsif @guess == 'i'
-      p "You have four color code pegs to play in any combination for one given guess. Mastermind will provide feedback on the number of correct colors, and the number of correct positions."
     elsif @guess == 'c' || @guess == "cheat"
       p "Cheat code: '#{@secret_code.join}'"
     else

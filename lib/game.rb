@@ -14,6 +14,11 @@ class Game
     puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
     puts ">"
     @start = $stdin.gets.chomp.downcase
+    if @start == 'i'
+      p "You have four color code pegs to play in any combination for one given guess. Mastermind will provide feedback on the number of correct colors, and the number of correct positions."
+    elsif @start = 'q' || 'quit'
+      p "You have exited the game"
+    end
   end
 end
 
