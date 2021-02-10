@@ -32,7 +32,7 @@ class GameTest < Minitest::Test
   end
 
   def test_it_can_exit_at_welcome_with_q
-    # skip
+    skip
     guess = 'rrrr'
     turn = Turn.new(guess)
     game = Game.new(turn)
@@ -41,5 +41,15 @@ class GameTest < Minitest::Test
     assert_equal test_text, game.welcome
   end
 
+  def test_it_can_enter_play_mode
+    # skip
+    guess = 'rrrr'
+    turn = Turn.new(guess)
+    game = Game.new(turn)
 
+    test_text = "I have generated a beginner sequence with four elements made up of: (r)ed, (g)reen, (b)lue, and (y)ellow. Use (q)uit at any time to end the game.
+    What's your guess?"
+
+    assert_equal 'rrrr', game.welcome
+  end
 end
