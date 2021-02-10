@@ -82,4 +82,21 @@ class TurnTest < Minitest::Test
 
     assert_equal "You have four color code pegs to play in any combination for one given guess. Mastermind will provide feedback on the number of correct colors, and the number of correct positions.", turn.get_code
   end
+
+  def test_it_can_print_current_secret_code_with_c
+    guess = 'c'
+    turn = Turn.new(guess)
+    turn.secret_code = %w(y r g b)
+
+    assert_equal "Cheat code: 'yrgb'", turn.get_code
+  end
+
+  def test_it_can_provide_feedback_on_correct_colors
+    guess = 'rrgb'
+    turn = Turn.new(guess)
+    turn.get_code
+    turn.secret_code = %w(y r g b)
+
+    assert_equal 3, turn.key_color
+  end
 end

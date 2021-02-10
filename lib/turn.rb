@@ -8,16 +8,21 @@ class Turn
     @all_possible_codes = ["r", "g", "b", "y"].repeated_permutation(4).to_a
   end
 
+  def key_color
+    (@secret_code & @code_guess).length
+  end
 
   def make_secret_code
     @secret_code = all_possible_codes.sample
   end
 
   def get_code
-    if @guess == 'q'
+    if @guess == 'q' || @guess == "quit"
       p "You have exited the game"
     elsif @guess == 'i'
       p "You have four color code pegs to play in any combination for one given guess. Mastermind will provide feedback on the number of correct colors, and the number of correct positions."
+    elsif @guess == 'c' || @guess == "cheat"
+      p "Cheat code: '#{@secret_code.join}'"
     else
       a = @guess.chars
       a.each do |letter|
@@ -48,8 +53,6 @@ class Turn
   # increment guess_counter
   # repeat loop
 end
-# <<<<<<< HEAD
-
 
 
 # array method to create all possibilities of game

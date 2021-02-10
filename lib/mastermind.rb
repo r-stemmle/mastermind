@@ -11,9 +11,9 @@ puts "I have generated a beginner sequence with four elements made up of: (r)ed,
 (g)reen, (b)lue, and (y)ellow. Use (q)uit at any time to end the game.
 What's your guess?"
 code_guess = $stdin.gets.chomp.downcase
-p code_guess 
+p code_guess
 
-"#{code_guess} has #{key_white} of the correct elements with #{key_red} in the correct positions
+"#{code_guess} has #{key_color} of the correct elements with #{key_red} in the correct positions
 You've taken #{guess_counter} guess"
 
 
