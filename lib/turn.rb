@@ -1,8 +1,8 @@
 class Turn
   attr_accessor :guess, :code_guess, :secret_code, :all_possible_codes, :red_peg, :white_peg
 
-  def initialize(guess)
-    @guess = guess
+  def initialize #(guess)
+    @guess = ""
     @code_guess = []
     @secret_code = []
     @red_peg = 0
@@ -44,9 +44,7 @@ class Turn
   end
 
   def too_short?
-    if @code_guess.length <= 3
-      p "Your guess is too short"
-    end
+    @code_guess.length <= 3
   end
 
   def too_long?

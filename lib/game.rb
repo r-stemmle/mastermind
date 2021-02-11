@@ -28,13 +28,18 @@ class Game
   def play
     puts "I have generated a beginner sequence with four elements made up of: (r)ed, (g)reen, (b)lue, and (y)ellow. Use (q)uit at any time to end the game.
     What's your guess?"
-    guess = $stdin.gets.chomp.downcase
-    @turn.make_secret_code
-    if guess == 'q' || guess == 'quit'
-      quits_game
-    elsif guess == 'c'
-      p code_display
+    turn.guess = $stdin.gets.chomp.downcase
+    # @turn.make_secret_code
+    # if guess == 'q' || guess == 'quit'
+    #   quits_game
+    # elsif guess == 'c'
+    #   p code_display
+    # elsif guess
+    # end
+    if turn.too_short?
+      p "Your guess is too short"
     end
+    turn.get_code
 
   end
 
