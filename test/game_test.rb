@@ -42,7 +42,7 @@ class GameTest < Minitest::Test
   end
 
   def test_it_can_enter_play_mode
-    # skip
+    skip
     guess = 'rrrr'
     turn = Turn.new(guess)
     game = Game.new(turn)
@@ -52,4 +52,33 @@ class GameTest < Minitest::Test
 
     assert_equal 'rrrr', game.welcome
   end
+
+  def test_can_quit_during_play
+    skip
+    test_text = "You have exited the game"
+
+    assert_equal test_text, game.welcome
+  end
+
+  def test_can_make_code_display_friendly
+    # skip
+    guess = 'rrrr'
+    turn = Turn.new(guess)
+    game = Game.new(turn)
+    turn.make_secret_code
+    turn.secret_code = ['y', 'y', 'y', 'y']
+
+    assert_equal 'YYYY', game.code_display
+  end
+
+  # def test_can_show_secret_code
+  #   # skip
+  #   guess = 'rrrr'
+  #   turn = Turn.new(guess)
+  #   game = Game.new(turn)
+  #   require "pry"; binding.pry
+  #   turn.secret_code = ['y', 'y', 'y', 'y']
+  #
+  #   assert_equal 'YYYY', game.welcome
+  # end
 end
