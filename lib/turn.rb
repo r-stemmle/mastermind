@@ -1,6 +1,5 @@
 require './lib/game'
 
-
 class Turn
   attr_accessor :guess,
                 :code_guess,

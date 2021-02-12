@@ -5,11 +5,11 @@ require './lib/game'
 
 class GameTest < Minitest::Test
   def test_it_exists_and_has_attributes
+
     game = Game.new
     guess = Guess.new("rrgb")
     turn = Turn.new(guess)
-
-
+    
     assert_instance_of Game, game
   end
 
@@ -64,12 +64,20 @@ class GameTest < Minitest::Test
   def test_can_make_code_display_friendly
     skip
     guess = 'rrrr'
-    turn = Turn.new(guess)
+    turn = Turn.new #(guess)
     game = Game.new(turn)
     turn.make_secret_code
     turn.secret_code = ['y', 'y', 'y', 'y']
 
     assert_equal 'YYYY', game.code_display
+  end
+
+  def test_it_says_guess_too_short
+    turn = Turn.new #(guess)
+    game = Game.new(turn)
+    turn.make_secret_code
+
+    assert_equal "Your guess is too short", game.welcome
   end
 
   # def test_can_show_secret_code
