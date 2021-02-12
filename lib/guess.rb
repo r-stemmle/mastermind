@@ -10,24 +10,22 @@ class Guess
     end
   end
 
-  def get_code
-    if @code_guess == "q" || @code_guess == 'quit'
+  def quit_or_cheat
+    if @guess == "q" || @guess == "quit"
       p "You have exited the game"
-    else @code_guess == 'c' || @code_guess == "cheat"
+    else @guess == "c" || @guess == "cheat"
       p "Cheat code: '#{@secret_code}'"
     end
   end
 
   def too_short?
-    if @code_guess.length <= 3
-      p "Your guess is too short"
-    end
+    puts "Your guess is too short"
+    @code_guess.length <= 3
   end
 
   def too_long?
-    if @code_guess.length >= 5
-      p "Your guess is too long"
-    end
+    puts "Your guess is too long"
+    @code_guess.length >= 5
   end
 
 end
