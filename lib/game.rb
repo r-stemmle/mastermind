@@ -21,6 +21,11 @@ class Game
     puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
     puts ">"
     @start = $stdin.gets.chomp.downcase
+    if @start == "q" || @start == "quit"
+      quits_game
+    elsif @start == "i"
+      gives_instructions
+    end
   end
 
   def make_secret_code
@@ -28,7 +33,7 @@ class Game
   end
 
   def play_message
-    puts "I have generated a beginner sequence with four elements made up of: (r)ed, (g)reen, (b)lue, and (y)ellow. Use (q)uit at any time to end the game.
+    p "I have generated a beginner sequence with four elements made up of: (r)ed, (g)reen, (b)lue, and (y)ellow. Use (q)uit at any time to end the game.
     What's your guess?"
   end
 
@@ -48,6 +53,10 @@ class Game
       You've taken 1 guess"
       self.play
     end
+  end
+
+  def gives_instructions
+    p "You have four color code pegs to play in any combination for one given guess. Mastermind will provide feedback on the number of correct colors, and the number of correct positions."
   end
 
   def quits_game
