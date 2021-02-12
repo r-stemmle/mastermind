@@ -60,7 +60,7 @@ class GameTest < Minitest::Test
     assert_equal test_text, game.play_message
   end
 
-  def test_can_quit_during_play # CONTINUE FROM HERE~~~~~
+  def test_can_quit_during_play
     skip
     secret_code = %w(b b b b)
     guess = Guess.new("rrrr")
@@ -71,6 +71,18 @@ class GameTest < Minitest::Test
     test_text = "You have exited the game"
 
     assert_equal test_text, game.quits_game
+  end
+
+  def test_can_show_secret_code
+    # skip
+    game = Game.new
+    secret_code = game.make_secret_code
+    guess = Guess.new("rrrr")
+    turn = Turn.new(guess, secret_code)
+    game.welcome
+    expected = #what do we put here????
+# require "pry"; binding.pry
+    assert_equal expected, game.secret_code
   end
 
   def test_can_make_code_display_friendly
@@ -94,14 +106,5 @@ class GameTest < Minitest::Test
     assert_equal "Your guess is too short", game.welcome
   end
 
-  # def test_can_show_secret_code
-  #   # skip
-  #   guess = 'rrrr'
-  #   turn = Turn.new(guess, secret_code)
-  #   game = Game.new(turn)
-  #   require "pry"; binding.pry
-  #   turn.secret_code = ['y', 'y', 'y', 'y']
-  #
-  #   assert_equal 'YYYY', game.welcome
-  # end
+
 end

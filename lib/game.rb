@@ -25,6 +25,9 @@ class Game
       quits_game
     elsif @start == "i"
       gives_instructions
+    elsif @start == "p"
+      self.play_message
+      self.play
     end
   end
 
@@ -39,9 +42,15 @@ class Game
 
   def play
     @input = $stdin.gets.chomp.downcase
-    @guess = Guess.new(@input)
-    @turn = Turn.new(@guess, @secret_code)
-    self.get_pegs
+    if @input == "q" || @input == "quit"
+      quits_game
+    elsif @input == "c" || @input == "cheat"
+      p "Hey Cheater, heres your code: #{@secret_code.join().upcase}"
+    else
+      @guess = Guess.new(@input)
+      @turn = Turn.new(@guess, @secret_code)
+      self.get_pegs
+    end
   end
 
   def get_pegs
