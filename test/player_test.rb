@@ -1,18 +1,18 @@
 require 'minitest/autorun'
 require 'minitest/pride'
-require './lib/key_peg.rb'
+require './lib/player.rb'
 
 class PlayerTest < Minitest::Test
 
   def test_it_exists
-    key_peg = KeyPeg.new("red")
+    player = Player.new("Joe")
 
-    assert_instance_of KeyPeg, key_peg
+    assert_instance_of Player, player
   end
 
   def test_it_has_attributes
-    key_peg = KeyPeg.new("red")
+    player = Player.new("Joe")
 
-    assert_equal "red", key_peg.color
+    assert_equal "Joe", player.name 
   end
 end
