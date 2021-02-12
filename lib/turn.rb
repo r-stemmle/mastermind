@@ -21,11 +21,11 @@ class Turn
     # Red pegs computed below 23-26
     @red_peg = 0
     @code_guess.each_with_index do |color, index|
-     if color == @secret_code[index]
-       @red_peg += 1
-     end
+      if color == @secret_code[index]
+        @red_peg += 1
+      end
     end
-    # White pegs are computed below
+
     color_checker = []
     @code_guess.each do |letter|
       if @secret_code.include?(letter) && color_checker.include?(letter) == false
