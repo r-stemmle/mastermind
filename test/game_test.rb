@@ -51,7 +51,6 @@ class GameTest < Minitest::Test
     skip
     secret_code = %w(b b b b)
     guess = Guess.new("rrrr")
-    # turn = Turn.new(guess, secret_code)
     game = Game.new
     game.welcome
 
@@ -124,7 +123,6 @@ class GameTest < Minitest::Test
     guess = Guess.new("rrrr", @difficulty_level)
     turn = Turn.new(guess, secret_code)
     game.welcome
-    expected = "Hey Cheater, heres your code: #{@secret_code.join().upcase}"
 
     assert_equal "4", game.difficulty_level
   end
