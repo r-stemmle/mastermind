@@ -51,7 +51,6 @@ class GameTest < Minitest::Test
     skip
     secret_code = %w(b b b b)
     guess = Guess.new("rrrr")
-    # turn = Turn.new(guess, secret_code)
     game = Game.new
     game.welcome
 
@@ -96,6 +95,7 @@ class GameTest < Minitest::Test
   end
 
   def test_it_can_count_guesses
+    skip
     game = Game.new
     secret_code = game.make_secret_code
     guess = Guess.new("rrrr")
@@ -114,6 +114,24 @@ class GameTest < Minitest::Test
     remaining_seconds = total_seconds_elapsed - (minutes_elapsed * 60)
     p minutes_elapsed
     p remaining_seconds
+  end
+
+  def test_player_can_choose_difficulty_level
+    skip
+    game = Game.new
+    secret_code = %w(r g b g)
+    guess = Guess.new("rrrr", @difficulty_level)
+    turn = Turn.new(guess, secret_code)
+    game.welcome
+
+    assert_equal "4", game.difficulty_level
+  end
+
+  def test_all_combinations_changes_by_level
+    game = Game.new
+    game.welcome
+
+    assert_equal 15625, game.all_possible_codes.length
   end
 
 end
