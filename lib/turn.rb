@@ -19,6 +19,7 @@ class Turn
   def find_key_colors
     color_index_checker = []
     @code_guess.each_with_index do |color, index|
+      
       if color == @secret_code[index]
         @red_peg += 1
       end

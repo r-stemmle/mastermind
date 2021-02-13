@@ -20,7 +20,7 @@ class TurnTest < Minitest::Test
 
     assert_equal ['r', 'r', 'g', 'b'], turn.code_guess
   end
-
+ 
   def test_it_can_have_secret_code
     secret_code = %w(r r r r)
     guess = Guess.new('rrgb')

@@ -20,12 +20,13 @@ class Game
     puts "Welcome to MASTERMIND"
     puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
     puts ">"
-    @start = $stdin.gets.chomp.downcase
+    @start = $stdin.gets.chomp.downcase    # helper method lines 23-31?
     if @start == "q" || @start == "quit"
       quits_game
     elsif @start == "i"
       gives_instructions
     elsif @start == "p"
+      @secret_code = make_secret_code
       self.play_message
       self.play
     end
@@ -44,23 +45,33 @@ class Game
     @input = $stdin.gets.chomp.downcase
     if @input == "q" || @input == "quit"
       quits_game
-    elsif @input == "c" || @input == "cheat"
-      p "Hey Cheater, heres your code: #{@secret_code.join().upcase}"
     else
       @guess = Guess.new(@input)
       @turn = Turn.new(@guess, @secret_code)
+      if @input == "c" || @input == "cheat"
+        p "Hey Cheater, heres your code: #{@secret_code.join().upcase}"
+      elsif @guess.too_short?
+        puts "Your guess is too short"
+      elsif @guess.too_long?
+        puts "Your guess is too long"
+      end
       self.get_pegs
     end
   end
 
   def get_pegs
-    @turn.find_key_colors
-    if @turn.red_peg == 4
-      p "Winner"
-    else
-      p "'#{@turn.guess.guess}' has #{@turn.white_peg} of the correct elements with #{turn.red_peg} in the correct positions
-      You've taken 1 guess"
+    if @turn.code_guess == ["c"] || @turn.code_guess == ["cheat"]
+      self.play_message
       self.play
+    else
+      @turn.find_key_colors
+      if @turn.red_peg == 4
+        p "Winner"
+      else
+        p "'#{@turn.guess.guess}' has #{@turn.white_peg} of the correct elements with #{turn.red_peg} in the correct positions
+        You've taken 1 guess"
+        self.play
+      end
     end
   end
 

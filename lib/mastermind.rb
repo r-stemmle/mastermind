@@ -8,13 +8,7 @@ game = Game.new
 
 game.welcome
 
-if game.start == "p"
-  game.play_message
-  secret_code = game.make_secret_code
-  p secret_code
-  game.play
-  game.get_pegs
-end
+
 
 
 

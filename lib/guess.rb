@@ -19,12 +19,10 @@ class Guess
   end
 
   def too_short?
-    puts "Your guess is too short"
     @code_guess.length <= 3
   end
 
   def too_long?
-    puts "Your guess is too long"
     @code_guess.length >= 5
   end
 
