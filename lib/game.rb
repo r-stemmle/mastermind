@@ -3,7 +3,15 @@ require './lib/guess'
 
 
 class Game
-  attr_reader :start, :input, :guess, :secret_code, :guess_count, :start_time
+  attr_reader :start,
+              :input,
+              :guess,
+              :secret_code,
+              :guess_count,
+              :start_time,
+              :difficulty_level,
+              :all_possible_codes
+
   attr_accessor :turn
 
   def initialize
@@ -15,7 +23,18 @@ class Game
     @secret_code
     @guess_count = 1
     @start_time
-    @all_possible_codes = ["r", "g", "b", "y"].repeated_permutation(4).to_a
+    @difficulty_level
+    @all_possible_codes
+  end
+
+  def set_all_possible_codes(difficulty_level)
+    if @difficulty_level == 4
+      @all_possible_codes = ["r", "g", "b", "y"].repeated_permutation(4).to_a
+    elsif @difficulty_level == 6
+      @all_possible_codes = ["r", "g", "b", "y", "o"].repeated_permutation(6).to_a
+    elsif @difficulty_level == 8
+      @all_possible_codes = ["r", "g", "b", "y", "o", "v"].repeated_permutation(8).to_a
+    end
   end
 
   def welcome
@@ -31,6 +50,8 @@ class Game
       self.play_message
       self.play
     elsif @start == "p" || @start == "play"
+      set_difficulty_level
+      set_all_possible_codes(@difficulty_level)
       @secret_code = make_secret_code
       @start_time = Time.now
       self.play_message
@@ -43,7 +64,7 @@ class Game
   end
 
   def play_message
-    p "I have generated a beginner sequence with four elements made up of: (r)ed, (g)reen, (b)lue, and (y)ellow. Use (q)uit at any time to end the game.  What's your guess?"
+    p "You have chosen the #{difficulty_level}. Mastermind has constructed a secret sequence with #{difficulty_level} elements made up of: (r)ed, (g)reen, (b)lue, and (y)ellow, #{intermediate_color}, #{advanced_color}. Use (q)uit at any time to end the game.  What's your guess?"
   end
 
   def play
@@ -51,7 +72,7 @@ class Game
     if @input == "q" || @input == "quit"
       quits_game
     else
-      @guess = Guess.new(@input)
+      @guess = Guess.new(@input, @difficulty_level)
       @turn = Turn.new(@guess, @secret_code)
       if @input == "c" || @input == "cheat"
         p "Hey Cheater, heres your code: '#{@secret_code.join().upcase}'  "
@@ -95,4 +116,16 @@ class Game
     @turn.count_correct_positions
     @turn.count_correct_colors
   end
+
+  def set_difficulty_level
+    puts "Please choose a difficulty level: Beginner = 4 characters (use: 4), 4 colors, Intermediate = 6 characters, 5 colors (use: 6), Advanced = 8 characters, 6 colors (use: 8)"
+    @difficulty_level = $stdin.gets.chomp.downcase.to_i
+  end
+
+  def intermediate_color
+  end
+
+  def advanced_color
+  end
+
 end

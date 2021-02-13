@@ -1,7 +1,8 @@
 class Guess
-  attr_reader :guess, :code_guess
+  attr_reader :guess, :code_guess, :difficulty_level
 
-  def initialize(guess)
+  def initialize(guess, difficulty_level)
+    @difficulty_level = difficulty_level
     @guess = guess
     @code_guess = []
     input = guess.chars
@@ -19,11 +20,12 @@ class Guess
   end
 
   def too_short?
-    @code_guess.length <= 3
+    #beginner is 4, intermediate guess is 6, advanced is 8
+    @code_guess.length < @difficulty_level
   end
 
   def too_long?
-    @code_guess.length >= 5
+    @code_guess.length > @difficulty_level
   end
 
 end
