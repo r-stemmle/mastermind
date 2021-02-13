@@ -6,12 +6,14 @@ class Turn
                 :secret_code,
                 :all_possible_codes,
                 :red_peg,
-                :white_peg
+                :white_peg,
+                :difficulty_level
 
-  def initialize(guess, secret_code)
+  def initialize(guess, secret_code, difficulty_level)
     @guess = guess
     @code_guess = @guess.code_guess
     @secret_code = secret_code
+    @difficulty_level = difficulty_level
     @red_peg = 0
     @white_peg = 0
   end
@@ -26,7 +28,7 @@ class Turn
   end
 
   def count_correct_colors
-    %w(b g r y).each do |color|
+    level_colors.each do |color|
       if @code_guess.count(color) < @secret_code.count(color)
         @white_peg += @code_guess.count(color)
       else
@@ -42,4 +44,15 @@ class Turn
   def guessed_secret_code?
     @code_guess == @secret_code
   end
+
+  def level_colors
+    if @difficulty_level == 4
+      %w(r g b y)
+    elsif @difficulty_level == 6
+      %w(r g b y o)
+    elsif @difficulty_level == 8
+      %w(r g b y o v)
+    end
+  end
+
 end

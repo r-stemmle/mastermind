@@ -46,9 +46,6 @@ class Game
       quits_game
     elsif @start == "i" || @start == "instructions"
       gives_instructions
-      puts "===" * 20
-      self.play_message
-      self.play
     elsif @start == "p" || @start == "play"
       set_difficulty_level
       set_all_possible_codes(@difficulty_level)
@@ -64,7 +61,7 @@ class Game
   end
 
   def play_message
-    p "You have chosen the #{difficulty_level}. Mastermind has constructed a secret sequence with #{difficulty_level} elements made up of: (r)ed, (g)reen, (b)lue, and (y)ellow, #{intermediate_color}, #{advanced_color}. Use (q)uit at any time to end the game.  What's your guess?"
+    p "You have chosen the #{difficulty_level}. Mastermind has constructed a secret sequence with #{difficulty_level} elements made up of: (r)ed, (g)reen, (b)lue, (y)ellow#{intermediate_color} #{advanced_color} Use (q)uit at any time to end the game.  What's your guess?"
   end
 
   def play
@@ -73,7 +70,7 @@ class Game
       quits_game
     else
       @guess = Guess.new(@input, @difficulty_level)
-      @turn = Turn.new(@guess, @secret_code)
+      @turn = Turn.new(@guess, @secret_code, @difficulty_level)
       if @input == "c" || @input == "cheat"
         p "Hey Cheater, heres your code: '#{@secret_code.join().upcase}'  "
       elsif @guess.too_short?
@@ -91,7 +88,7 @@ class Game
       self.play
     else
       find_key_colors
-      if @turn.red_peg == 4
+      if @turn.red_peg == @difficulty_level
         total_seconds_elapsed = (Time.now - @start_time).round(0)
         game_minutes = ((total_seconds_elapsed % 3600) / 60).to_i
         game_seconds = total_seconds_elapsed - (game_minutes * 60)
@@ -105,7 +102,9 @@ class Game
   end
 
   def gives_instructions
-    p "You have four color coded pegs to play in any combination for one given guess. Mastermind will provide feedback on the number of correct colors, and the number of correct positions."
+    p "You have 4, 6, or 8 (depending on selected difficulty level) color coded pegs to play in any combination for one given guess. Mastermind will provide feedback on the number of correct colors, and the number of correct positions."
+    puts "===" * 20
+    self.welcome
   end
 
   def quits_game
@@ -123,9 +122,15 @@ class Game
   end
 
   def intermediate_color
+    if @difficulty_level == 6
+      "(o)range."
+    end
   end
 
   def advanced_color
+    if @difficulty_level == 8
+      ", (o)range, (v)iolet."
+    end
   end
 
 end
