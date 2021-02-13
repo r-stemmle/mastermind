@@ -16,23 +16,21 @@ class Turn
     @white_peg = 0
   end
 
-  def find_key_colors
+  def count_correct_positions
     color_index_checker = []
     @code_guess.each_with_index do |color, index|
-      
       if color == @secret_code[index]
         @red_peg += 1
       end
+    end
+  end
 
-      @secret_code.each_with_index do |color_secret, index_secret|
-        if color_secret == color
-          if color_index_checker.include?(index_secret)
-            @white_peg
-          else
-            @white_peg += 1
-            color_index_checker << index_secret
-          end
-        end
+  def count_correct_colors
+    %w(b g r y).each do |color|
+      if @code_guess.count(color) < @secret_code.count(color)
+        @white_peg += @code_guess.count(color)
+      else
+        @white_peg += @secret_code.count(color)
       end
     end
   end

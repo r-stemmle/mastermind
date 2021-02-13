@@ -20,7 +20,7 @@ class TurnTest < Minitest::Test
 
     assert_equal ['r', 'r', 'g', 'b'], turn.code_guess
   end
- 
+
   def test_it_can_have_secret_code
     secret_code = %w(r r r r)
     guess = Guess.new('rrgb')
@@ -45,12 +45,11 @@ class TurnTest < Minitest::Test
     assert_equal false, turn.guessed_secret_code?
   end
 
-  def test_it_can_provide_feedback_on_correct_colors # NEEDS ATTENTION
-    skip
+  def test_it_can_provide_feedback_on_correct_colors
     secret_code = %w(r r g b)
     guess = Guess.new('rrry')
     turn = Turn.new(guess, secret_code)
-    turn.find_key_colors
+    turn.count_correct_colors
 
     assert_equal 2, turn.white_peg
   end
@@ -59,7 +58,7 @@ class TurnTest < Minitest::Test
     secret_code = %w(r r g b)
     guess = Guess.new('rrry')
     turn = Turn.new(guess, secret_code)
-    turn.find_key_colors
+    turn.count_correct_positions
 
     assert_equal 2, turn.red_peg
   end
@@ -68,7 +67,7 @@ class TurnTest < Minitest::Test
     secret_code = %w(r r g b)
     guess = Guess.new('rggb')
     turn = Turn.new(guess, secret_code)
-    turn.find_key_colors
+    turn.count_correct_positions
 
     assert_equal 3, turn.red_peg
   end

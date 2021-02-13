@@ -82,44 +82,33 @@ class GameTest < Minitest::Test
     turn = Turn.new(guess, secret_code)
     game.welcome
     expected = "Hey Cheater, heres your code: #{@secret_code.join().upcase}"
-    # require "pry"; binding.pry
 
     refute_equal expected, game.turn.get_secret_code
   end
 
-  # def test_can_make_code_display_friendly
-  #   skip
-  #   secret_code = %w(b b b b)
-  #   guess = 'rrrr'
-  #   turn = Turn.new(guess, secret_code)
-  #   game = Game.new(turn)
-  #   turn.make_secret_code
-  #   turn.secret_code = ['y', 'y', 'y', 'y']
-  #
-  #   assert_equal 'YYYY', game.code_display
-  # end
-
   def test_it_says_guess_too_short
     skip
-    turn = Turn.new #(guess)
+    turn = Turn.new
     game = Game.new(turn)
     turn.make_secret_code
 
     assert_equal "Your guess is too short", game.welcome
   end
 
-  def test_it_can_count_guesses # It works
-    skip
+  def test_it_can_count_guesses
     game = Game.new
     secret_code = game.make_secret_code
     guess = Guess.new("rrrr")
     turn = Turn.new(guess, secret_code)
     game.welcome
+    # Must cheat when game starts and enter as first guess
+
+    assert_equal 1, game.guess_count
   end
 
   def test_it_can_be_timed
     start_time = Time.now
-    sleep(5)
+    sleep(1)
     total_seconds_elapsed = (Time.now - start_time).round(0)
     minutes_elapsed = ((total_seconds_elapsed % 3600) / 60).to_i
     remaining_seconds = total_seconds_elapsed - (minutes_elapsed * 60)

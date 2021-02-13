@@ -69,7 +69,7 @@ class Game
       self.play_message
       self.play
     else
-      @turn.find_key_colors
+      find_key_colors
       if @turn.red_peg == 4
         total_seconds_elapsed = (Time.now - @start_time).round(0)
         game_minutes = ((total_seconds_elapsed % 3600) / 60).to_i
@@ -89,5 +89,10 @@ class Game
 
   def quits_game
     p "You have exited the game"
+  end
+
+  def find_key_colors
+    @turn.count_correct_positions
+    @turn.count_correct_colors
   end
 end
