@@ -6,6 +6,7 @@ require './lib/game'
 
 class GameTest < Minitest::Test
   def test_it_exists_and_has_attributes
+    skip
     secret_code = %w(b b b b)
     game = Game.new
     guess = Guess.new("rrgb")
@@ -106,4 +107,24 @@ class GameTest < Minitest::Test
 
     assert_equal "Your guess is too short", game.welcome
   end
+
+  def test_it_can_count_guesses # It works
+    skip
+    game = Game.new
+    secret_code = game.make_secret_code
+    guess = Guess.new("rrrr")
+    turn = Turn.new(guess, secret_code)
+    game.welcome
+  end
+
+  def test_it_can_be_timed
+    start_time = Time.now
+    sleep(5)
+    total_seconds_elapsed = (Time.now - start_time).round(0)
+    minutes_elapsed = ((total_seconds_elapsed % 3600) / 60).to_i
+    remaining_seconds = total_seconds_elapsed - (minutes_elapsed * 60)
+    p minutes_elapsed
+    p remaining_seconds
+  end
+
 end
