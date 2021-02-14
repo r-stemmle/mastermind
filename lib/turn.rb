@@ -1,13 +1,13 @@
 require './lib/game'
 
 class Turn
-  attr_accessor :guess,
-                :code_guess,
-                :secret_code,
-                :all_possible_codes,
-                :red_peg,
-                :white_peg,
-                :difficulty_level
+  attr_reader :guess,
+              :code_guess,
+              :secret_code,
+              :all_possible_codes,
+              :red_peg,
+              :white_peg,
+              :difficulty_level
 
   def initialize(guess, secret_code, difficulty_level)
     @guess = guess
@@ -18,6 +18,7 @@ class Turn
     @white_peg = 0
   end
 
+# Counts number of guess colors at the same index as the secret code colors
   def count_correct_positions
     color_index_checker = []
     @code_guess.each_with_index do |color, index|
@@ -27,8 +28,9 @@ class Turn
     end
   end
 
+# Counts the number of guess colors matching colors in the secret code
   def count_correct_colors
-    level_colors.each do |color|
+    colors_by_difficulty.each do |color|
       if @code_guess.count(color) < @secret_code.count(color)
         @white_peg += @code_guess.count(color)
       else
@@ -45,7 +47,7 @@ class Turn
     @code_guess == @secret_code
   end
 
-  def level_colors
+  def colors_by_difficulty
     if @difficulty_level == 4
       %w(r g b y)
     elsif @difficulty_level == 6

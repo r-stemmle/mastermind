@@ -27,16 +27,6 @@ class Game
     @all_possible_codes
   end
 
-  def set_all_possible_codes(difficulty_level)
-    if @difficulty_level == 4
-      @all_possible_codes = ["r", "g", "b", "y"].repeated_permutation(4).to_a
-    elsif @difficulty_level == 6
-      @all_possible_codes = ["r", "g", "b", "y", "o"].repeated_permutation(6).to_a
-    elsif @difficulty_level == 8
-      @all_possible_codes = ["r", "g", "b", "y", "o", "v"].repeated_permutation(8).to_a
-    end
-  end
-
   def welcome
     puts "Welcome to MASTERMIND"
     puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
@@ -56,9 +46,7 @@ class Game
     end
   end
 
-  def make_secret_code
-    @secret_code = @all_possible_codes.sample
-  end
+
 
   def play_message
     p "You have chosen the #{difficulty_level}. Mastermind has constructed a secret sequence with #{difficulty_level} elements made up of: (r)ed, (g)reen, (b)lue, (y)ellow#{intermediate_color} #{advanced_color} Use (q)uit at any time to end the game.  What's your guess?"
@@ -94,7 +82,7 @@ class Game
         game_seconds = total_seconds_elapsed - (game_minutes * 60)
         p "Congratulations! You guessed the sequence '#{@secret_code.join().upcase}' in #{@guess_count} guesses over #{game_minutes} minutes, #{game_seconds} seconds."
       else
-        p " '#{@turn.guess.guess.upcase}' has #{@turn.white_peg} of the correct elements with #{turn.red_peg} in the correct positions.  You've taken #{@guess_count} guess(es)"
+        p " '#{@turn.guess.user_entry.upcase}' has #{@turn.white_peg} of the correct elements with #{turn.red_peg} in the correct positions.  You've taken #{@guess_count} guess(es)"
         @guess_count += 1
         self.play
       end
@@ -133,4 +121,17 @@ class Game
     end
   end
 
+  def set_all_possible_codes(difficulty_level)
+    if @difficulty_level == 4
+      @all_possible_codes = ["r", "g", "b", "y"].repeated_permutation(4).to_a
+    elsif @difficulty_level == 6
+      @all_possible_codes = ["r", "g", "b", "y", "o"].repeated_permutation(6).to_a
+    elsif @difficulty_level == 8
+      @all_possible_codes = ["r", "g", "b", "y", "o", "v"].repeated_permutation(8).to_a
+    end
+  end
+
+  def make_secret_code
+    @secret_code = @all_possible_codes.sample
+  end
 end

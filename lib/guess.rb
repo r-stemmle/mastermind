@@ -1,20 +1,22 @@
 class Guess
-  attr_reader :guess, :code_guess, :difficulty_level
+  attr_reader :user_entry,
+              :code_guess,
+              :difficulty_level
 
-  def initialize(guess, difficulty_level)
+  def initialize(user_entry, difficulty_level)
     @difficulty_level = difficulty_level
-    @guess = guess
+    @user_entry = user_entry
     @code_guess = []
-    input = guess.chars
+    input = user_entry.chars
     input.each do |letter|
       @code_guess << letter
     end
   end
 
   def quit_or_cheat
-    if @guess == "q" || @guess == "quit"
+    if @user_entry == "q" || @user_entry == "quit"
       p "You have exited the game"
-    else @guess == "c" || @guess == "cheat"
+    else @user_entry == "c" || @user_entry == "cheat"
       p "Cheat code: '#{@secret_code}'"
     end
   end
