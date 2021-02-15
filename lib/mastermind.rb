@@ -2,9 +2,8 @@ require './lib/game'
 require './lib/player'
 require './lib/turn'
 require './lib/guess'
-
-player = Player.new("Joe")
-
+require 'json'
+json = File.read('winners.json')
 
 game = Game.new
 

@@ -29,8 +29,9 @@ class Game
   def welcome
     #lines 32-34 will change after extension complete - Joe
     puts "Welcome to MASTERMIND"
+    puts ""
     puts "Would you like to (p)lay, read the (i)nstructions, or (q)uit?"
-    puts ">"
+    print ">"
     welcome_response
     if @welcome_response == "q" || @welcome_response == "quit"
       quits_game
@@ -89,6 +90,7 @@ class Game
 
   def set_difficulty_level
     puts "Please choose a difficulty level: Beginner = 4 characters (use: 4), 4 colors, Intermediate = 6 characters, 5 colors (use: 6), Advanced = 8 characters, 6 colors (use: 8)"
+    print ">"
     @difficulty_level = $stdin.gets.chomp
     if @difficulty_level != "q"
       while @difficulty_level != "4" && @difficulty_level != "6" && @difficulty_level != "8" do
@@ -103,6 +105,7 @@ class Game
 
   def play_message
     p "You have chosen the #{difficulty_level}. Mastermind has constructed a secret sequence with #{difficulty_level} elements made up of: (r)ed, (g)reen, (b)lue, (y)ellow#{intermediate_color} #{advanced_color} Use (q)uit at any time to end the game.  What's your guess?"
+    print ">"
   end
 
   def gives_instructions
@@ -115,7 +118,18 @@ class Game
     total_seconds_elapsed = (Time.now - @start_time).round(0)
     game_minutes = ((total_seconds_elapsed % 3600) / 60).to_i
     game_seconds = total_seconds_elapsed - (game_minutes * 60)
-    p "Congratulations! You guessed the sequence '#{@secret_code.join().upcase}' in #{@guess_count} guesses over #{game_minutes} minutes, #{game_seconds} seconds."
+    p "Congratulations! You've guessed the sequence! What's your name?"
+    puts ""
+    print ">"
+    name = gets.chomp
+    puts ""
+    player = Player.new(name, @secret_code.join().upcase, @guess_count, [game_minutes, game_seconds])
+    puts "#{player.name}, you guessed the sequence '#{@secret_code.join().upcase}' in #{@guess_count} guesses over #{game_minutes} minutes, #{game_seconds} seconds. That's 1 minute, 10 seconds faster and two guesses fewer than the average."
+    puts ""
+    puts "=== TOP 10 ==="
+    puts "1. #{player.name} solved #{player.sequence} in #{player.guess_count} guesses over #{game_minutes}m#{game_seconds}s"
+    # p "Congratulations! You guessed the sequence '#{@secret_code.join().upcase}' in #{@guess_count} guesses over #{game_minutes} minutes, #{game_seconds} seconds."
+    # require "pry"; binding.pry
   end
 
   def feedback
