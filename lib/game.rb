@@ -113,8 +113,7 @@ class Game
     name = gets.chomp
     puts ""
     player = Player.new(name, @secret_code.join().upcase, @guess_count, (@game_minutes*60) + @game_seconds)
-    my_object = {name: player.name, sequence: player.sequence, guess_count: player.guess_count, timer: player.play_time}
-
+    player_object = {name: player.name, sequence: player.sequence, guess_count: player.guess_count, timer: player.play_time}
     #array with all historical number of guesses
     all_guess_count = []
     all_seconds_count = []
@@ -124,27 +123,31 @@ class Game
       all_guess_count << each_hash["guess_count"]
       all_seconds_count << each_hash["timer"]
     end
+    #sum of all guesses to prepare for finding average number of guesses
     guess_array_sum = all_guess_count.inject(0) { |sum, x| sum + x }
-    @average_guesses = guess_array_sum/all_guess_count.length
-
+    @average_guesses = guess_array_sum / all_guess_count.length
+    #sum of all seconds to prepare for finding average number of seconds
     seconds_array_sum = all_seconds_count.inject(0) { |sum, x| sum + x }
-    @average_seconds = seconds_array_sum/all_seconds_count.length
+    @average_seconds = seconds_array_sum / all_seconds_count.length
     # adds each players data to winners.json
     File.open("winners.json", "a+") do |winner_info|
-      winner_info.puts(my_object.to_json)
+      winner_info.puts(player_object.to_json)
     end
     puts "#{player.name}, you guessed the sequence '#{@secret_code.join().upcase}' in #{@guess_count} guesses over #{@game_minutes} minutes, #{@game_seconds} seconds. That's #{time_comparer} and #{guess_comparer} than the average."
     puts ""
+    top_ten
+  end
+
+  def top_ten
     puts "=== TOP 10 ==="
     ranking_array = []
     IO.foreach("winners.json") do |winner|
-      each_h = JSON.parse(winner)
-      ranking_array << each_h
+      winner_hash = JSON.parse(winner)
+      ranking_array << winner_hash
     end
-    b = ranking_array.sort_by do |a|
-      a["guess_count"]
+    b = ranking_array.sort_by do |hash|
+      hash["guess_count"]
     end
-
     puts "1. #{b[0]["name"]} solved '#{b[0]["sequence"]}' in #{b[0]["guess_count"]} guesses over #{b[0]["timer"].divmod(60)[0]}m#{b[0]["timer"].divmod(60)[1]}s."
     puts "2. #{b[1]["name"]} solved '#{b[1]["sequence"]}' in #{b[1]["guess_count"]} guesses over #{b[1]["timer"].divmod(60)[0]}m#{b[1]["timer"].divmod(60)[1]}s."
     puts "3. #{b[2]["name"]} solved '#{b[2]["sequence"]}' in #{b[2]["guess_count"]} guesses over #{b[2]["timer"].divmod(60)[0]}m#{b[2]["timer"].divmod(60)[1]}s."
@@ -155,11 +158,6 @@ class Game
     puts "8. #{b[7]["name"]} solved '#{b[7]["sequence"]}' in #{b[7]["guess_count"]} guesses over #{b[7]["timer"].divmod(60)[0]}m#{b[7]["timer"].divmod(60)[1]}s."
     puts "9. #{b[8]["name"]} solved '#{b[8]["sequence"]}' in #{b[8]["guess_count"]} guesses over #{b[8]["timer"].divmod(60)[0]}m#{b[8]["timer"].divmod(60)[1]}s."
     puts "10. #{b[9]["name"]} solved '#{b[9]["sequence"]}' in #{b[9]["guess_count"]} guesses over #{b[9]["timer"].divmod(60)[0]}m#{b[9]["timer"].divmod(60)[1]}s."
-
-  end
-
-  def minute_finder(seconds)
-    [1, 19]
   end
 
   def time_comparer
