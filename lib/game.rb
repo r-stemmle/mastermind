@@ -35,6 +35,9 @@ class Game
     welcome_response
     if @welcome_response == "q" || @welcome_response == "quit"
       quits_game
+    elsif @welcome_response == "h" || @welcome_response == "high scores"
+      top_ten
+      returns_to_welcome
     elsif @welcome_response == "i" || @welcome_response == "instructions"
       display_instruction_screen
     elsif @welcome_response == "p" || @welcome_response == "play"
@@ -106,9 +109,18 @@ class Game
     total_seconds_elapsed = (Time.now - @start_time).round(0)
     @game_minutes = ((total_seconds_elapsed % 3600) / 60).to_i
     @game_seconds = total_seconds_elapsed - (@game_minutes * 60)
-    p "Congratulations! You've guessed the sequence! What's your name?"
-    puts ""
-    print ">"
+    puts "
+
+░█████╗░░█████╗░███╗░░██╗░██████╗░██████╗░░█████╗░████████╗██╗░░░██╗██╗░░░░░░█████╗░████████╗██╗░█████╗░███╗░░██╗░██████╗
+██╔══██╗██╔══██╗████╗░██║██╔════╝░██╔══██╗██╔══██╗╚══██╔══╝██║░░░██║██║░░░░░██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║██╔════╝
+██║░░╚═╝██║░░██║██╔██╗██║██║░░██╗░██████╔╝███████║░░░██║░░░██║░░░██║██║░░░░░███████║░░░██║░░░██║██║░░██║██╔██╗██║╚█████╗░
+██║░░██╗██║░░██║██║╚████║██║░░╚██╗██╔══██╗██╔══██║░░░██║░░░██║░░░██║██║░░░░░██╔══██║░░░██║░░░██║██║░░██║██║╚████║░╚═══██╗
+╚█████╔╝╚█████╔╝██║░╚███║╚██████╔╝██║░░██║██║░░██║░░░██║░░░╚██████╔╝███████╗██║░░██║░░░██║░░░██║╚█████╔╝██║░╚███║██████╔╝
+░╚════╝░░╚════╝░╚═╝░░╚══╝░╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░╚═════╝░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
+ ".light_white.on_black
+    puts "Congratulations! You've guessed the sequence! What's your name?
+     ".light_white.on_black
+    print ">".light_white.on_black
     name = gets.chomp
     puts ""
     player = Player.new(name, @secret_code.join().upcase, @guess_count, (@game_minutes*60) + @game_seconds)
@@ -132,13 +144,15 @@ class Game
     File.open("winners.json", "a+") do |winner_info|
       winner_info.puts(player_object.to_json)
     end
-    puts "#{player.name}, you guessed the sequence '#{@secret_code.join().upcase}' in #{@guess_count} guesses over #{@game_minutes} minutes, #{@game_seconds} seconds. That's #{time_comparer} and #{guess_comparer} than the average."
+    puts "#{player.name}, you guessed the sequence '#{@secret_code.join().upcase}' in #{@guess_count} guesses over #{@game_minutes} minutes, #{@game_seconds} seconds. That's #{time_comparer} and #{guess_comparer} than the average.".light_white.on_black
     puts ""
     top_ten
+    sleep(15)
+    welcome
   end
 
   def top_ten
-    puts "=== TOP 10 ==="
+    puts "=== TOP 10 ===".yellow.on_black
     ranking_array = []
     IO.foreach("winners.json") do |winner|
       winner_hash = JSON.parse(winner)
@@ -147,16 +161,17 @@ class Game
     b = ranking_array.sort_by do |hash|
       hash["guess_count"]
     end
-    puts "1. #{b[0]["name"]} solved '#{b[0]["sequence"]}' in #{b[0]["guess_count"]} guesses over #{b[0]["timer"].divmod(60)[0]}m#{b[0]["timer"].divmod(60)[1]}s."
-    puts "2. #{b[1]["name"]} solved '#{b[1]["sequence"]}' in #{b[1]["guess_count"]} guesses over #{b[1]["timer"].divmod(60)[0]}m#{b[1]["timer"].divmod(60)[1]}s."
-    puts "3. #{b[2]["name"]} solved '#{b[2]["sequence"]}' in #{b[2]["guess_count"]} guesses over #{b[2]["timer"].divmod(60)[0]}m#{b[2]["timer"].divmod(60)[1]}s."
-    puts "4. #{b[3]["name"]} solved '#{b[3]["sequence"]}' in #{b[3]["guess_count"]} guesses over #{b[3]["timer"].divmod(60)[0]}m#{b[3]["timer"].divmod(60)[1]}s."
-    puts "5. #{b[4]["name"]} solved '#{b[4]["sequence"]}' in #{b[4]["guess_count"]} guesses over #{b[4]["timer"].divmod(60)[0]}m#{b[4]["timer"].divmod(60)[1]}s."
-    puts "6. #{b[5]["name"]} solved '#{b[5]["sequence"]}' in #{b[5]["guess_count"]} guesses over #{b[5]["timer"].divmod(60)[0]}m#{b[5]["timer"].divmod(60)[1]}s."
-    puts "7. #{b[6]["name"]} solved '#{b[6]["sequence"]}' in #{b[6]["guess_count"]} guesses over #{b[6]["timer"].divmod(60)[0]}m#{b[6]["timer"].divmod(60)[1]}s."
-    puts "8. #{b[7]["name"]} solved '#{b[7]["sequence"]}' in #{b[7]["guess_count"]} guesses over #{b[7]["timer"].divmod(60)[0]}m#{b[7]["timer"].divmod(60)[1]}s."
-    puts "9. #{b[8]["name"]} solved '#{b[8]["sequence"]}' in #{b[8]["guess_count"]} guesses over #{b[8]["timer"].divmod(60)[0]}m#{b[8]["timer"].divmod(60)[1]}s."
-    puts "10. #{b[9]["name"]} solved '#{b[9]["sequence"]}' in #{b[9]["guess_count"]} guesses over #{b[9]["timer"].divmod(60)[0]}m#{b[9]["timer"].divmod(60)[1]}s."
+    puts "1. #{b[0]["name"]} solved '#{b[0]["sequence"]}' in #{b[0]["guess_count"]} guesses over #{b[0]["timer"].divmod(60)[0]}m#{b[0]["timer"].divmod(60)[1]}s.".yellow.on_black
+    puts "2. #{b[1]["name"]} solved '#{b[1]["sequence"]}' in #{b[1]["guess_count"]} guesses over #{b[1]["timer"].divmod(60)[0]}m#{b[1]["timer"].divmod(60)[1]}s.".yellow.on_black
+    puts "3. #{b[2]["name"]} solved '#{b[2]["sequence"]}' in #{b[2]["guess_count"]} guesses over #{b[2]["timer"].divmod(60)[0]}m#{b[2]["timer"].divmod(60)[1]}s.".yellow.on_black
+    puts "4. #{b[3]["name"]} solved '#{b[3]["sequence"]}' in #{b[3]["guess_count"]} guesses over #{b[3]["timer"].divmod(60)[0]}m#{b[3]["timer"].divmod(60)[1]}s.".yellow.on_black
+    puts "5. #{b[4]["name"]} solved '#{b[4]["sequence"]}' in #{b[4]["guess_count"]} guesses over #{b[4]["timer"].divmod(60)[0]}m#{b[4]["timer"].divmod(60)[1]}s.".yellow.on_black
+    puts "6. #{b[5]["name"]} solved '#{b[5]["sequence"]}' in #{b[5]["guess_count"]} guesses over #{b[5]["timer"].divmod(60)[0]}m#{b[5]["timer"].divmod(60)[1]}s.".yellow.on_black
+    puts "7. #{b[6]["name"]} solved '#{b[6]["sequence"]}' in #{b[6]["guess_count"]} guesses over #{b[6]["timer"].divmod(60)[0]}m#{b[6]["timer"].divmod(60)[1]}s.".yellow.on_black
+    puts "8. #{b[7]["name"]} solved '#{b[7]["sequence"]}' in #{b[7]["guess_count"]} guesses over #{b[7]["timer"].divmod(60)[0]}m#{b[7]["timer"].divmod(60)[1]}s.".yellow.on_black
+    puts "9. #{b[8]["name"]} solved '#{b[8]["sequence"]}' in #{b[8]["guess_count"]} guesses over #{b[8]["timer"].divmod(60)[0]}m#{b[8]["timer"].divmod(60)[1]}s.".yellow.on_black
+    puts "10. #{b[9]["name"]} solved '#{b[9]["sequence"]}' in #{b[9]["guess_count"]} guesses over #{b[9]["timer"].divmod(60)[0]}m#{b[9]["timer"].divmod(60)[1]}s.".yellow.on_black
+    puts ""
   end
 
   def time_comparer
@@ -202,24 +217,28 @@ class Game
     After each guess, the CODEMAKER will give feedback on the number of correct colors, and the number of correct positions on the elements in your guess.
 
     Try to uncover the SECRET CODE in the fewest guesses and shortest time.
-    ".light_white.on_black
+     ".light_white.on_black
     puts "===".light_white.on_black * 60
   end
 
   def display_instruction_screen
     long_instructions
+    returns_to_welcome
+  end
+
+  def returns_to_welcome
     puts "Enter (p)lay to return to the start screen".white.on_black
     continue = $stdin.gets.chomp.downcase
     while continue != "p" && continue != "play" do
-      system("clear")
-      long_instructions
+      # system("clear")
+      # long_instructions
       puts "Please enter (p)lay to return to the start screen".yellow.blink
       continue = $stdin.gets.chomp.downcase
     end
     system("clear")
     welcome
-  end
 
+  end
   def feedback
     puts " '#{@turn.guess.user_entry.upcase}' has #{@turn.white_peg} of the correct elements with #{turn.red_peg} in the correct positions.  You've taken #{@guess_count} guess(es)".light_white.on_black
     @guess_count += 1
@@ -295,7 +314,8 @@ class Game
 
         Welcome to MASTERMIND
 
-        Would you like to (p)lay, read the (i)nstructions, or (q)uit?
+        Would you like to (p)lay, read the (i)nstructions, view the (h)igh scores
+                          or (q)uit?
         >".light_white.on_black
   end
 
@@ -320,21 +340,22 @@ class Game
     puts "===".light_white.on_black * 60
   end
 
-  def win_message
-    secret_code_in_words = (@secret_code.join().upcase).yellow.on_black
-    guess_count_in_words = (@guess_count.to_s).light_green.on_black
-    game_minutes_in_words = (game_minutes.to_s).light_green.on_black
-    game_seconds_in_words = (game_seconds.to_s).light_green.on_black
-    puts "
-░██╗░░░░░░░██╗███████╗██╗░░░░░██╗░░░░░  ██████╗░░█████╗░███╗░░██╗███████╗░░░
-░██║░░██╗░░██║██╔════╝██║░░░░░██║░░░░░  ██╔══██╗██╔══██╗████╗░██║██╔════╝░░░
-░╚██╗████╗██╔╝█████╗░░██║░░░░░██║░░░░░  ██║░░██║██║░░██║██╔██╗██║█████╗░░░░░
-░░████╔═████║░██╔══╝░░██║░░░░░██║░░░░░  ██║░░██║██║░░██║██║╚████║██╔══╝░░░░░
-░░╚██╔╝░╚██╔╝░███████╗███████╗███████╗  ██████╔╝╚█████╔╝██║░╚███║███████╗██╗
-░░░╚═╝░░░╚═╝░░╚══════╝╚══════╝╚══════╝  ╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝╚═╝
-
- ".light_white.on_black
-    puts "Congratulations CODEBREAKER! You uncovered the secret sequence '#{secret_code_in_words}' in #{guess_count_in_words} guesses over #{game_minutes_in_words} minutes, #{game_seconds_in_words} seconds.
-     ".light_white.on_black
-  end
+# This win_message method highlights the results using different colors.
+#   def win_message
+#     secret_code_in_words = (@secret_code.join().upcase).yellow.on_black
+#     guess_count_in_words = (@guess_count.to_s).light_green.on_black
+#     game_minutes_in_words = (game_minutes.to_s).light_green.on_black
+#     game_seconds_in_words = (game_seconds.to_s).light_green.on_black
+#     puts "
+# ░██╗░░░░░░░██╗███████╗██╗░░░░░██╗░░░░░  ██████╗░░█████╗░███╗░░██╗███████╗░░░
+# ░██║░░██╗░░██║██╔════╝██║░░░░░██║░░░░░  ██╔══██╗██╔══██╗████╗░██║██╔════╝░░░
+# ░╚██╗████╗██╔╝█████╗░░██║░░░░░██║░░░░░  ██║░░██║██║░░██║██╔██╗██║█████╗░░░░░
+# ░░████╔═████║░██╔══╝░░██║░░░░░██║░░░░░  ██║░░██║██║░░██║██║╚████║██╔══╝░░░░░
+# ░░╚██╔╝░╚██╔╝░███████╗███████╗███████╗  ██████╔╝╚█████╔╝██║░╚███║███████╗██╗
+# ░░░╚═╝░░░╚═╝░░╚══════╝╚══════╝╚══════╝  ╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝╚═╝
+#
+#  ".light_white.on_black
+#     puts "Congratulations CODEBREAKER! You uncovered the secret sequence '#{secret_code_in_words}' in #{guess_count_in_words} guesses over #{game_minutes_in_words} minutes, #{game_seconds_in_words} seconds.
+#      ".light_white.on_black
+#   end
 end
