@@ -17,6 +17,9 @@
 ## General info
 This project is a Ruby implementation of the classic game Mastermind.
 
+## Screenshots
+
+
 ## Technologies
 Project is created with:
 * Ruby version: 2.5.3
@@ -41,14 +44,16 @@ List of features ready and TODOs for future development
 * Fully playable game
 * Game provides feedback on number of correct colors, correct positions, incorrect lengths of guesses, number of turns, and total game time
 * The player can select one of three difficulty levels
-* Awesome feature 2...
-* Awesome feature 3...
+* Play data is recorded in an external file, which is used to compare current game to average performance
+* Game maintains and can display a high score list
+* Game displays ascii art titles and colorful text
 
 To-do list:
-* Record tracking and Top Ten
-* Add color and ASCII graphics
-* Allow user to enter their name and have it displayed when the game is run
+* Refactor top_ten method to allow for fewer than 10 records in JSON file
 * Create executable script to allow user to run 'mastermind' directly from their Terminal
+* Update install directions in README
+* Refactor game_test.rb
+* Update README with screenshots and/or code snippets
 
 ## Status
 Project is: _in progress_
