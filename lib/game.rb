@@ -108,15 +108,34 @@ class Game
   end
 
   def winner
-    total_seconds_elapsed = (Time.now - @start_time).round(0)
-    @game_minutes = ((total_seconds_elapsed % 3600) / 60).to_i
-    @game_seconds = total_seconds_elapsed - (@game_minutes * 60)
+    stop_time
     display_win_message
     name = gets.chomp
     puts ""
-    player = Player.new(name, @secret_code.join().upcase, @guess_count, (@game_minutes*60) + @game_seconds)
-    player_object = {name: player.name, sequence: player.sequence, guess_count: player.guess_count, timer: player.play_time}
-    #array with all historical number of guesses
+    winner = Winner.new(name, @secret_code.join().upcase, @guess_count, (@game_minutes*60) + @game_seconds)
+    # new_winner = WinnerHistory.new(winner)
+    player_object = {name: winner.name, sequence: winner.sequence, guess_count: winner.guess_count, timer: winner.play_time}
+
+    all_game_averages
+    unless player_cheated?
+      File.open("winners.json", "a+") do |winner_info|
+        winner_info.puts(player_object.to_json)
+      end
+    end
+    puts "#{winner.name}, you guessed the sequence '#{@secret_code.join().upcase}' in #{@guess_count} guesses over #{@game_minutes} minutes, #{@game_seconds} seconds. That's #{time_comparer} and #{guess_comparer} than the average.".light_white.on_black
+    puts ""
+    top_ten
+    sleep(15)
+    welcome
+  end
+
+  class WinnerHistory
+    def initialize(winner)
+      @winner = winner
+    end
+  end
+
+  def all_game_averages
     all_guess_count = []
     all_seconds_count = []
     #iteration to collect latest guess counts
@@ -132,19 +151,9 @@ class Game
     seconds_array_sum = all_seconds_count.inject(0) { |sum, x| sum + x }
     @average_seconds = seconds_array_sum / all_seconds_count.length
     # adds each player's data to winners.json if not cheater
-    unless player_cheated?
-      File.open("winners.json", "a+") do |winner_info|
-        winner_info.puts(player_object.to_json)
-      end
-    end
-    puts "#{player.name}, you guessed the sequence '#{@secret_code.join().upcase}' in #{@guess_count} guesses over #{@game_minutes} minutes, #{@game_seconds} seconds. That's #{time_comparer} and #{guess_comparer} than the average.".light_white.on_black
-    puts ""
-    top_ten
-    sleep(15)
-    welcome
   end
 
-  def top_ten # Refactor to handle fewer than 10 records 
+  def top_ten # Refactor to handle fewer than 10 records
     puts "=== TOP 10 ===".yellow.on_black
     ranking_array = []
     IO.foreach("winners.json") do |winner|
@@ -187,6 +196,12 @@ class Game
     else
       "no different"
     end
+  end
+
+  def stop_time
+    total_seconds_elapsed = (Time.now - @start_time).round(0)
+    @game_minutes = ((total_seconds_elapsed % 3600) / 60).to_i
+    @game_seconds = total_seconds_elapsed - (@game_minutes * 60)
   end
 
   def play_message

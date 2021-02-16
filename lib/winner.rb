@@ -1,4 +1,4 @@
-class Player
+class Winner
   attr_reader :name,
               :sequence,
               :guess_count,

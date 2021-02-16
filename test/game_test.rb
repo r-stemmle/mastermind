@@ -135,4 +135,8 @@ class GameTest < Minitest::Test
 
     assert_equal 15625, game.all_possible_codes.length
   end
+
+  def test
+  end
+
 end
