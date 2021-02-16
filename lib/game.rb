@@ -160,19 +160,19 @@ class Game
       winner_hash = JSON.parse(winner)
       ranking_array << winner_hash
     end
-    b = ranking_array.sort_by do |hash|
+    sorted_by_guesscount = ranking_array.sort_by do |hash|
       hash["guess_count"]
     end
-    puts "1. #{b[0]["name"]} solved '#{b[0]["sequence"]}' in #{b[0]["guess_count"]} guesses over #{b[0]["timer"].divmod(60)[0]}m#{b[0]["timer"].divmod(60)[1]}s.".yellow.on_black
-    puts "2. #{b[1]["name"]} solved '#{b[1]["sequence"]}' in #{b[1]["guess_count"]} guesses over #{b[1]["timer"].divmod(60)[0]}m#{b[1]["timer"].divmod(60)[1]}s.".yellow.on_black
-    puts "3. #{b[2]["name"]} solved '#{b[2]["sequence"]}' in #{b[2]["guess_count"]} guesses over #{b[2]["timer"].divmod(60)[0]}m#{b[2]["timer"].divmod(60)[1]}s.".yellow.on_black
-    puts "4. #{b[3]["name"]} solved '#{b[3]["sequence"]}' in #{b[3]["guess_count"]} guesses over #{b[3]["timer"].divmod(60)[0]}m#{b[3]["timer"].divmod(60)[1]}s.".yellow.on_black
-    puts "5. #{b[4]["name"]} solved '#{b[4]["sequence"]}' in #{b[4]["guess_count"]} guesses over #{b[4]["timer"].divmod(60)[0]}m#{b[4]["timer"].divmod(60)[1]}s.".yellow.on_black
-    puts "6. #{b[5]["name"]} solved '#{b[5]["sequence"]}' in #{b[5]["guess_count"]} guesses over #{b[5]["timer"].divmod(60)[0]}m#{b[5]["timer"].divmod(60)[1]}s.".yellow.on_black
-    puts "7. #{b[6]["name"]} solved '#{b[6]["sequence"]}' in #{b[6]["guess_count"]} guesses over #{b[6]["timer"].divmod(60)[0]}m#{b[6]["timer"].divmod(60)[1]}s.".yellow.on_black
-    puts "8. #{b[7]["name"]} solved '#{b[7]["sequence"]}' in #{b[7]["guess_count"]} guesses over #{b[7]["timer"].divmod(60)[0]}m#{b[7]["timer"].divmod(60)[1]}s.".yellow.on_black
-    puts "9. #{b[8]["name"]} solved '#{b[8]["sequence"]}' in #{b[8]["guess_count"]} guesses over #{b[8]["timer"].divmod(60)[0]}m#{b[8]["timer"].divmod(60)[1]}s.".yellow.on_black
-    puts "10. #{b[9]["name"]} solved '#{b[9]["sequence"]}' in #{b[9]["guess_count"]} guesses over #{b[9]["timer"].divmod(60)[0]}m#{b[9]["timer"].divmod(60)[1]}s.".yellow.on_black
+
+    i = 0
+    while i < 10
+      if sorted_by_guesscount[i] == nil
+        break
+      else
+        puts "#{(i + 1)}. #{sorted_by_guesscount[i]["name"]} solved '#{sorted_by_guesscount[i]["sequence"]}' in #{sorted_by_guesscount[i]["guess_count"]} guesses over #{sorted_by_guesscount[i]["timer"].divmod(60)[0]}m#{sorted_by_guesscount[i]["timer"].divmod(60)[0]}s.".yellow.on_black
+        i += 1
+      end
+    end
     puts ""
   end
 

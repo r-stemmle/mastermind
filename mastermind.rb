@@ -1,5 +1,5 @@
 require './lib/game'
-require './lib/player'
+require './lib/winner'
 require './lib/turn'
 require './lib/guess'
 require 'json'
