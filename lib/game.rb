@@ -13,6 +13,7 @@ class Game
               :game_seconds,
               :difficulty_level,
               :all_possible_codes
+              :cheater
 
   attr_accessor :turn
 
@@ -27,6 +28,7 @@ class Game
     @start_time
     @difficulty_level
     @all_possible_codes
+    @cheater = false
   end
 
   def welcome
@@ -67,7 +69,8 @@ class Game
   def turns
     @turn = Turn.new(@guess, @secret_code, @difficulty_level)
     if @input == "c" || @input == "cheat"
-      puts "Hey Cheater, heres your code: '#{@secret_code.join().upcase}'".light_magenta.on_black
+      puts "Hey Cheater, here's your code: '#{@secret_code.join().upcase}'".light_magenta.on_black
+      @cheater = true
     elsif @guess.too_short?
       puts "Your guess is too short".yellow.on_black.blink
     elsif @guess.too_long?
@@ -75,7 +78,6 @@ class Game
     end
     get_pegs
   end
-
 
   def get_pegs
     if @turn.code_guess == ["c"] || @turn.code_guess == ["cheat"]
@@ -109,18 +111,7 @@ class Game
     total_seconds_elapsed = (Time.now - @start_time).round(0)
     @game_minutes = ((total_seconds_elapsed % 3600) / 60).to_i
     @game_seconds = total_seconds_elapsed - (@game_minutes * 60)
-    puts "
-
-░█████╗░░█████╗░███╗░░██╗░██████╗░██████╗░░█████╗░████████╗██╗░░░██╗██╗░░░░░░█████╗░████████╗██╗░█████╗░███╗░░██╗░██████╗
-██╔══██╗██╔══██╗████╗░██║██╔════╝░██╔══██╗██╔══██╗╚══██╔══╝██║░░░██║██║░░░░░██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║██╔════╝
-██║░░╚═╝██║░░██║██╔██╗██║██║░░██╗░██████╔╝███████║░░░██║░░░██║░░░██║██║░░░░░███████║░░░██║░░░██║██║░░██║██╔██╗██║╚█████╗░
-██║░░██╗██║░░██║██║╚████║██║░░╚██╗██╔══██╗██╔══██║░░░██║░░░██║░░░██║██║░░░░░██╔══██║░░░██║░░░██║██║░░██║██║╚████║░╚═══██╗
-╚█████╔╝╚█████╔╝██║░╚███║╚██████╔╝██║░░██║██║░░██║░░░██║░░░╚██████╔╝███████╗██║░░██║░░░██║░░░██║╚█████╔╝██║░╚███║██████╔╝
-░╚════╝░░╚════╝░╚═╝░░╚══╝░╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░╚═════╝░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
- ".light_white.on_black
-    puts "Congratulations! You've guessed the sequence! What's your name?
-     ".light_white.on_black
-    print ">".light_white.on_black
+    display_win_message
     name = gets.chomp
     puts ""
     player = Player.new(name, @secret_code.join().upcase, @guess_count, (@game_minutes*60) + @game_seconds)
@@ -140,9 +131,11 @@ class Game
     #sum of all seconds to prepare for finding average number of seconds
     seconds_array_sum = all_seconds_count.inject(0) { |sum, x| sum + x }
     @average_seconds = seconds_array_sum / all_seconds_count.length
-    # adds each players data to winners.json
-    File.open("winners.json", "a+") do |winner_info|
-      winner_info.puts(player_object.to_json)
+    # adds each player's data to winners.json if not cheater
+    unless player_cheated?
+      File.open("winners.json", "a+") do |winner_info|
+        winner_info.puts(player_object.to_json)
+      end
     end
     puts "#{player.name}, you guessed the sequence '#{@secret_code.join().upcase}' in #{@guess_count} guesses over #{@game_minutes} minutes, #{@game_seconds} seconds. That's #{time_comparer} and #{guess_comparer} than the average.".light_white.on_black
     puts ""
@@ -151,7 +144,7 @@ class Game
     welcome
   end
 
-  def top_ten
+  def top_ten # Refactor to handle fewer than 10 records 
     puts "=== TOP 10 ===".yellow.on_black
     ranking_array = []
     IO.foreach("winners.json") do |winner|
@@ -285,6 +278,10 @@ class Game
     @welcome_response = $stdin.gets.chomp.downcase
   end
 
+  def player_cheated?
+    @cheater
+  end
+
   def express_difficulty_in_string
     difficulty_in_words = ""
     if @difficulty_level == 4
@@ -340,6 +337,20 @@ class Game
     puts "===".light_white.on_black * 60
   end
 
+  def display_win_message
+    puts "
+
+░█████╗░░█████╗░███╗░░██╗░██████╗░██████╗░░█████╗░████████╗██╗░░░██╗██╗░░░░░░█████╗░████████╗██╗░█████╗░███╗░░██╗░██████╗
+██╔══██╗██╔══██╗████╗░██║██╔════╝░██╔══██╗██╔══██╗╚══██╔══╝██║░░░██║██║░░░░░██╔══██╗╚══██╔══╝██║██╔══██╗████╗░██║██╔════╝
+██║░░╚═╝██║░░██║██╔██╗██║██║░░██╗░██████╔╝███████║░░░██║░░░██║░░░██║██║░░░░░███████║░░░██║░░░██║██║░░██║██╔██╗██║╚█████╗░
+██║░░██╗██║░░██║██║╚████║██║░░╚██╗██╔══██╗██╔══██║░░░██║░░░██║░░░██║██║░░░░░██╔══██║░░░██║░░░██║██║░░██║██║╚████║░╚═══██╗
+╚█████╔╝╚█████╔╝██║░╚███║╚██████╔╝██║░░██║██║░░██║░░░██║░░░╚██████╔╝███████╗██║░░██║░░░██║░░░██║╚█████╔╝██║░╚███║██████╔╝
+░╚════╝░░╚════╝░╚═╝░░╚══╝░╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░╚═════╝░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═════╝░
+ ".light_white.on_black
+    puts "You've guessed the sequence! What's your name?
+     ".light_white.on_black
+    print ">".light_white.on_black
+  end
 # This win_message method highlights the results using different colors.
 #   def win_message
 #     secret_code_in_words = (@secret_code.join().upcase).yellow.on_black
