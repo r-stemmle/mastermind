@@ -1,5 +1,6 @@
 require './lib/turn'
 require './lib/guess'
+require './lib/winner'
 require 'json'
 require 'colorize'
 
@@ -169,7 +170,7 @@ class Game
       if sorted_by_guesscount[i] == nil
         break
       else
-        puts "#{(i + 1)}. #{sorted_by_guesscount[i]["name"]} solved '#{sorted_by_guesscount[i]["sequence"]}' in #{sorted_by_guesscount[i]["guess_count"]} guesses over #{sorted_by_guesscount[i]["timer"].divmod(60)[0]}m#{sorted_by_guesscount[i]["timer"].divmod(60)[0]}s.".yellow.on_black
+        puts "#{(i + 1)}. #{sorted_by_guesscount[i]["name"]} solved '#{sorted_by_guesscount[i]["sequence"]}' in #{sorted_by_guesscount[i]["guess_count"]} guesses over #{sorted_by_guesscount[i]["timer"].divmod(60)[0]}m#{sorted_by_guesscount[i]["timer"].divmod(60)[1]}s.".yellow.on_black
         i += 1
       end
     end
