@@ -5,10 +5,8 @@
 ```
 ## Table of contents
 * [General info](#general-info)
-* [Screenshots](#screenshots)
 * [Technologies](#technologies)
 * [Setup](#setup)
-* [Code Examples](#code-examples)
 * [Features](#features)
 * [Status](#status)
 * [Inspiration](#inspiration)
@@ -17,27 +15,20 @@
 ## General info
 This project is a Ruby implementation of the classic game Mastermind.
 
-## Screenshots
-
-
 ## Technologies
 Project is created with:
 * Ruby version: 2.5.3
 
 ## Setup
-To run this project, install it locally using ruby in MacOS application 'Terminal':
+To run this game, save a copy of this repository locally. Then, run it using ruby in the MacOS application 'Terminal':
 (note: '$' is not typed)
 
 ```
-$ cd ../lorem
-$ ruby install...
-$ ruby install... (add any gems here?)
-$ ruby start...
+$ cd ../mastermind
+$ gem install json
+$ gem install colorize
+$ ruby mastermind.rb
 ```
-
-## Code Examples
-Show examples of usage:
-`put-your-code-here`
 
 ## Features
 List of features ready and TODOs for future development
@@ -49,11 +40,8 @@ List of features ready and TODOs for future development
 * Game displays ascii art titles and colorful text
 
 To-do list:
-* Refactor top_ten method to allow for fewer than 10 records in JSON file
 * Create executable script to allow user to run 'mastermind' directly from their Terminal
-* Update install directions in README
 * Refactor game_test.rb
-* Update README with screenshots and/or code snippets
 
 ## Status
 Project is: _in progress_
