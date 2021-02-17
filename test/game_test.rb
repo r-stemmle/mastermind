@@ -5,7 +5,7 @@ require './lib/turn'
 require './lib/game'
 
 class GameTest < Minitest::Test
-  def test_it_exists_and_has_attributes
+  def test_it_exists
     # skip
     secret_code = %w(b b b b)
     difficulty_level = 4
@@ -33,7 +33,7 @@ class GameTest < Minitest::Test
     turn = Turn.new(guess, secret_code, 4)
     expected = "You have 4, 6, or 8 (depending on selected difficulty level) color coded pegs to play in any combination for one given guess. Mastermind will provide feedback on the number of correct colors, and the number of correct positions."
 
-    # This test does not function now that method calls 'welcome' method
+    # This test does not function now that method calls 'welcome' method, but i works!
 
     assert_equal expected, game.gives_instructions
   end
@@ -58,7 +58,7 @@ class GameTest < Minitest::Test
 
     expected = "You have chosen the #{difficulty_level}. Mastermind has constructed a secret sequence with #{difficulty_level} elements made up of: (r)ed, (g)reen, (b)lue, (y)ellow#{intermediate_color} #{advanced_color} Use (q)uit at any time to end the game.  What's your guess?"
 
-    # This test takes place in a loop
+    # This test takes place in a loop, and it works!
 
     assert_equal expected, game.play_message
   end
@@ -109,8 +109,9 @@ class GameTest < Minitest::Test
     total_seconds_elapsed = (Time.now - start_time).round(0)
     minutes_elapsed = ((total_seconds_elapsed % 3600) / 60).to_i
     remaining_seconds = total_seconds_elapsed - (minutes_elapsed * 60)
-    p minutes_elapsed
-    p remaining_seconds
+    minutes_elapsed
+    remaining_seconds
+    assert_equal 1, remaining_seconds
   end
 
   def test_player_can_choose_difficulty_level
@@ -133,10 +134,6 @@ class GameTest < Minitest::Test
 
     # Must enter 6 for difficulty
 
-    assert_equal 15625, game.all_possible_codes.length
+    assert_equal 15625, game.set_all_possible_codes(6).length
   end
-
-  def test
-  end
-
 end

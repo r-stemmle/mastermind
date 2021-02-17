@@ -4,7 +4,6 @@ class Turn
   attr_reader :guess,
               :code_guess,
               :secret_code,
-              :all_possible_codes,
               :red_peg,
               :white_peg,
               :difficulty_level

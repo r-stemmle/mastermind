@@ -3,7 +3,6 @@ require 'minitest/pride'
 require './lib/guess.rb'
 require './lib/turn.rb'
 
-
 class PlayerTest < Minitest::Test
 
   def test_it_exists
@@ -19,7 +18,9 @@ class PlayerTest < Minitest::Test
     difficulty_entry = 4
     guess = Guess.new(user_entry, difficulty_entry)
 
+    assert_equal "rrgb", guess.user_entry
     assert_equal %w(r r g b), guess.code_guess
+    assert_equal 4, guess.difficulty_level
   end
 
   def test_if_guess_is_too_short

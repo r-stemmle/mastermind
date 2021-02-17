@@ -5,16 +5,10 @@ require 'json'
 require 'colorize'
 
 class Game
-  attr_reader :input,
-              :guess,
-              :secret_code,
-              :guess_count,
-              :start_time,
-              :game_minutes,
-              :game_seconds,
-              :difficulty_level,
-              :all_possible_codes
-              :cheater
+  attr_reader :input, #this method is populated after user starts game
+              :guess_count, #this method is tested during play
+              :difficulty_level, #method needed for getting color combinations
+              :all_possible_codes #this method may generate very long terminal output (milleeons)
 
   attr_accessor :turn
 
@@ -44,26 +38,26 @@ class Game
     elsif @welcome_response == "i" || @welcome_response == "instructions"
       display_instruction_screen
     elsif @welcome_response == "p" || @welcome_response == "play"
-      play_intro
+      play_intro # automatically goes to play intro message
     end
   end
 
   def play_intro
-    set_difficulty_level
+    set_difficulty_level #EXTENSION this allows player to set difficulty_level 4,6,8
     set_all_possible_codes(@difficulty_level)
     @secret_code = make_secret_code
     @start_time = Time.now
-    play_message
-    play
+    play_message #this message sets player up for their first guess
+    play # this is the collection process for the guess or cheat or quit entry
   end
 
   def play
-    @input = $stdin.gets.chomp.downcase
+    @input = gets.chomp.downcase
     if @input == "q" || @input == "quit"
       quits_game
     else
       @guess = Guess.new(@input, @difficulty_level)
-      turns
+      turns #takes a proper entry and puts the player into the turn loop called turns
     end
   end
 
@@ -77,7 +71,7 @@ class Game
     elsif @guess.too_long?
       puts "Your guess is too long".yellow.on_black.blink
     end
-    get_pegs
+    get_pegs # get pegs compares user guess with random secret code and gives feedback and also identifies if they have entered the winning code
   end
 
   def get_pegs
@@ -87,24 +81,10 @@ class Game
     else
       find_key_colors
       if @turn.red_peg == @difficulty_level
-        winner
+        winner # once player has entered correct code they become a winner and game data is calculated
       else
         feedback
       end
-    end
-  end
-
-  def set_difficulty_level
-    display_difficulty_level_screen
-    @difficulty_level = $stdin.gets.chomp
-    if @difficulty_level != "q"
-      while @difficulty_level != "4" && @difficulty_level != "6" && @difficulty_level != "8" do
-        puts "Try again!".yellow.on_black.blink
-        self.set_difficulty_level
-      end
-    elsif @difficulty_level == "q"
-        quits_game
-        exit!
     end
   end
 
@@ -115,10 +95,9 @@ class Game
     puts ""
     winner = Winner.new(name, @secret_code.join().upcase, @guess_count, (@game_minutes*60) + @game_seconds)
     # new_winner = WinnerHistory.new(winner)
-    player_object = {name: winner.name, sequence: winner.sequence, guess_count: winner.guess_count, timer: winner.play_time}
-
-    all_game_averages
-    unless player_cheated?
+    player_object = {name: winner.name, sequence: winner.sequence, guess_count: winner.guess_count, timer: winner.play_time} #this object is for json file
+    all_game_averages #helper method for comparing winner scores with average historical scores
+    unless player_cheated? #if user cheats, they will not be allowed into the top10
       File.open("winners.json", "a+") do |winner_info|
         winner_info.puts(player_object.to_json)
       end
@@ -126,13 +105,21 @@ class Game
     puts "#{winner.name}, you guessed the sequence '#{@secret_code.join().upcase}' in #{@guess_count} guesses over #{@game_minutes} minutes, #{@game_seconds} seconds. That's #{time_comparer} and #{guess_comparer} than the average.".light_white.on_black
     puts ""
     top_ten
-    sleep(15)
+    sleep(7)
     welcome
   end
 
-  class WinnerHistory
-    def initialize(winner)
-      @winner = winner
+  def set_difficulty_level
+    display_difficulty_level_screen
+    @difficulty_level = gets.chomp
+    if @difficulty_level != "q"
+      while @difficulty_level != "4" && @difficulty_level != "6" && @difficulty_level != "8" do
+        puts "Try again!".yellow.on_black.blink
+        self.set_difficulty_level
+      end
+    elsif @difficulty_level == "q"
+        quits_game
+        exit!
     end
   end
 
@@ -154,7 +141,7 @@ class Game
     # adds each player's data to winners.json if not cheater
   end
 
-  def top_ten # Refactor to handle fewer than 10 records
+  def top_ten
     puts "=== TOP 10 ===".yellow.on_black
     ranking_array = []
     IO.foreach("winners.json") do |winner|
@@ -164,13 +151,12 @@ class Game
     sorted_by_guesscount = ranking_array.sort_by do |hash|
       hash["guess_count"]
     end
-
     i = 0
     while i < 10
       if sorted_by_guesscount[i] == nil
         break
       else
-        puts "#{(i + 1)}. #{sorted_by_guesscount[i]["name"]} solved '#{sorted_by_guesscount[i]["sequence"]}' in #{sorted_by_guesscount[i]["guess_count"]} guesses over #{sorted_by_guesscount[i]["timer"].divmod(60)[0]}m#{sorted_by_guesscount[i]["timer"].divmod(60)[1]}s.".yellow.on_black 
+        puts "#{(i + 1)}. #{sorted_by_guesscount[i]["name"]} solved '#{sorted_by_guesscount[i]["sequence"]}' in #{sorted_by_guesscount[i]["guess_count"]} guesses over #{sorted_by_guesscount[i]["timer"].divmod(60)[0]}m#{sorted_by_guesscount[i]["timer"].divmod(60)[1]}s.".yellow.on_black
         i += 1
       end
     end
@@ -367,22 +353,5 @@ class Game
      ".light_white.on_black
     print ">".light_white.on_black
   end
-# This win_message method highlights the results using different colors.
-#   def win_message
-#     secret_code_in_words = (@secret_code.join().upcase).yellow.on_black
-#     guess_count_in_words = (@guess_count.to_s).light_green.on_black
-#     game_minutes_in_words = (game_minutes.to_s).light_green.on_black
-#     game_seconds_in_words = (game_seconds.to_s).light_green.on_black
-#     puts "
-# ░██╗░░░░░░░██╗███████╗██╗░░░░░██╗░░░░░  ██████╗░░█████╗░███╗░░██╗███████╗░░░
-# ░██║░░██╗░░██║██╔════╝██║░░░░░██║░░░░░  ██╔══██╗██╔══██╗████╗░██║██╔════╝░░░
-# ░╚██╗████╗██╔╝█████╗░░██║░░░░░██║░░░░░  ██║░░██║██║░░██║██╔██╗██║█████╗░░░░░
-# ░░████╔═████║░██╔══╝░░██║░░░░░██║░░░░░  ██║░░██║██║░░██║██║╚████║██╔══╝░░░░░
-# ░░╚██╔╝░╚██╔╝░███████╗███████╗███████╗  ██████╔╝╚█████╔╝██║░╚███║███████╗██╗
-# ░░░╚═╝░░░╚═╝░░╚══════╝╚══════╝╚══════╝  ╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝╚═╝
-#
-#  ".light_white.on_black
-#     puts "Congratulations CODEBREAKER! You uncovered the secret sequence '#{secret_code_in_words}' in #{guess_count_in_words} guesses over #{game_minutes_in_words} minutes, #{game_seconds_in_words} seconds.
-#      ".light_white.on_black
-#   end
+
 end
