@@ -41,10 +41,10 @@ List of features ready and TODOs for future development
 
 To-do list:
 * Create executable script to allow user to run 'mastermind' directly from their Terminal
-* Refactor game_test.rb
+* Additional refactoring
 
 ## Status
-Project is: _in progress_
+Project is: _completed_
 
 ## Contact
 Created by
