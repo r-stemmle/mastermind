@@ -5,6 +5,7 @@
 ```
 ## Table of contents
 * [General info](#general-info)
+* [Screenshot](#screenshot)
 * [Technologies](#technologies)
 * [Setup](#setup)
 * [Features](#features)
@@ -14,6 +15,9 @@
 
 ## General info
 This project is a Ruby implementation of the classic game Mastermind.
+
+## Screenshot
+![Mastermind animated screenshot](/img/mastermind.gif "Mastermind animated screenshot")
 
 ## Technologies
 Project is created with:
@@ -44,7 +48,7 @@ To-do list:
 * Refactor game_test.rb
 
 ## Status
-Project is: _in progress_
+Project is: _complete_
 
 ## Contact
 Created by
